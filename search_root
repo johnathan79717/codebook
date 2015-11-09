@@ -1,0 +1,12 @@
+template<class T, class F>
+T search_root(T lb, T ub, F f) {
+  T fl = f(lb), fu = f(ub);
+  for(int i = 0; i < 100; i++) {
+    T m = (lb + ub) / 2;
+    if(fl * f(m) <= 0)
+      ub = m;
+    else
+      lb = m;
+  }
+  return (lb + ub) / 2;
+}
