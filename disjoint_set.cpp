@@ -1,37 +1,49 @@
 struct DisjointSet {
-  VI par, _size;
-  int N;
+    VI par, _size;
+    int N;
+    stack<int> record;
 
-  DisjointSet(int N): par(N), _size(N), N(N) {
-    init();
-  }
-
-  void init() {
-    for(int i = 0; i < N; i++) {
-      par[i] = i;
-      _size[i] = 1;
+    DisjointSet(int N): par(N), _size(N), N(N) {
+        init();
     }
-  }
 
-  int find(int x) {
-    if(par[x] == x) return x;
-    else return par[x] = find(par[x]);
-  }
-
-  void unite(int x, int y) {
-    x = find(x);
-    y = find(y);
-    if(x == y) return;
-    if(_size[x] < _size[y]) {
-      par[x] = y;
-      _size[y] += _size[x];
-    } else {
-      par[y] = x;
-      _size[x] += _size[y];
+    void init() {
+        for(int i = 0; i < N; i++) {
+            par[i] = i;
+            _size[i] = 1;
+        }
     }
-  }
 
-  int size(int x) {
-    return _size[find(x)];
-  }
+    int find(int x) {
+        if(par[x] == x) return x;
+        else return par[x] = find(par[x]);
+    }
+
+    void unite(int x, int y) {
+        x = find(x);
+        y = find(y);
+        if(x == y) return;
+        if(_size[x] < _size[y]) {
+            par[x] = y;
+            _size[y] += _size[x];
+        } else {
+            par[y] = x;
+            _size[x] += _size[y];
+        }
+    }
+
+    void undo() {
+        assert(record.size());
+        int y = record.top();
+        record.pop();
+        if (y < 0) return;
+        int x = record.top();
+        record.pop();
+        par[x] = x;
+        _size[y] -= _size[x];
+    }
+
+    int size(int x) {
+        return _size[find(x)];
+    }
 };
