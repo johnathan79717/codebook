@@ -21,7 +21,7 @@ class Graph {
   }
   int dfs(int v, int f) {
     if(v == sink) return f;
-    for(int &i = iter[v]; i < G[v].size(); i++) {
+    for(int &i = iter[v]; i < SZ(G[v]); i++) {
       edge &e = G[v][i];
       if(e.cap > 0 && level[v] < level[e.to]) {
         int d = dfs(e.to, min(f, e.cap));

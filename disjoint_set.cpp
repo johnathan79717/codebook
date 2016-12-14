@@ -1,17 +1,17 @@
-struct DisjointSet {
+class DisjointSet {
     VI par, _size;
     int N;
-    stack<int> record;
-
-    DisjointSet(int N): par(N), _size(N), N(N) {
-        init();
-    }
 
     void init() {
         for(int i = 0; i < N; i++) {
             par[i] = i;
             _size[i] = 1;
         }
+    }
+
+public:
+    DisjointSet(int _N): par(_N), _size(_N), N(_N) {
+        init();
     }
 
     int find(int x) {
@@ -30,17 +30,6 @@ struct DisjointSet {
             par[y] = x;
             _size[x] += _size[y];
         }
-    }
-
-    void undo() {
-        assert(record.size());
-        int y = record.top();
-        record.pop();
-        if (y < 0) return;
-        int x = record.top();
-        record.pop();
-        par[x] = x;
-        _size[y] -= _size[x];
     }
 
     int size(int x) {

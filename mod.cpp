@@ -1,30 +1,3 @@
-int MOD = 1000000007;
-long long mul(long long a,long long b,long long mod=MOD){
-  long long x = 0,y=a%mod;
-  while(b > 0){
-    if(b%2 == 1){
-      x = x+y;
-      if(x >= mod) x -= mod;
-    }
-    y = y*2;
-    if(y >= mod) y -= mod;
-    b /= 2;
-  }
-  return x%mod;
-}
-
-long long pow(long long a, long long b, long long c=MOD){
-  long long x=1,y=a; // ll is taken to avoid overflow of intermediate results
-  while(b > 0){
-    if(b%2 == 1){
-      x=mul(x, y, c);
-    }
-    y = mul(y, y, c); // squaring the base
-    b /= 2;
-  }
-  return x%c;
-}
-
 #define PZ(x) PI((x).i);
 
 template<class Short, class Long>
@@ -32,8 +5,8 @@ struct ZZ {
     static Short MOD;
     Short i;
     ZZ():i(0) {}
-    ZZ(Short i): i(i >= 0 ? i : i + MOD) {}
-    ZZ(Long i): i(i % MOD) {}
+    ZZ(Short _i): i(_i >= 0 ? _i : _i + MOD) {}
+    ZZ(Long _i): i(_i % MOD) {}
     void operator +=(const ZZ& z) { i += z.i; if(i >= MOD) i -= MOD; }
     void operator -=(const ZZ& z) { i -= z.i; if(i < 0) i += MOD; }
     void operator *=(const ZZ& z) { i = (Long) i * z.i % MOD; }
@@ -114,3 +87,30 @@ typedef ZZ<int, long long> Z;
 template<> int Z::MOD = 1000000007;
 template<> vector<Z> Z::factorial(1, 1);
 template<> vector<Z> Z::inv_factorial(1, 1);
+
+long long mul(long long a,long long b,long long mod=Z::MOD){
+  long long x = 0,y=a%mod;
+  while(b > 0){
+    if(b%2 == 1){
+      x = x+y;
+      if(x >= mod) x -= mod;
+    }
+    y = y*2;
+    if(y >= mod) y -= mod;
+    b /= 2;
+  }
+  return x%mod;
+}
+
+long long pow(long long a, long long b, long long c=Z::MOD){
+  long long x=1,y=a; // ll is taken to avoid overflow of intermediate results
+  while(b > 0){
+    if(b%2 == 1){
+      x=mul(x, y, c);
+    }
+    y = mul(y, y, c); // squaring the base
+    b /= 2;
+  }
+  return x%c;
+}
+

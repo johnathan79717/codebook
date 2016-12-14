@@ -1,19 +1,20 @@
+template<class T>
 struct Treap {
-    static Treap mem[], *pmem;
+    //static Treap mem[], *pmem;
+    static unsigned state;
     Treap *l, *r;
-    int pri, key;
-    Value val;
-    Data data;
-    Lazy lazy;
+    unsigned pri;
+    T key;
+    //int val;
+    int size;
     Treap() {}
-    Treap(int _key) : l(nullptr), r(nullptr), pri(rand()), key(_key), val(1, 0), data(1, 0) {}
-    void pull() {
-        data = val;
-        if (l) data += l->getData();
-        if (r) data += r->getData();
+    Treap(T _key) : l(nullptr), r(nullptr), pri(state), key(_key), size(1) {
+        state = state * 1297 + 1301;
     }
-    Data getData() {
-        //return data.rot(lazy);
+    void pull() {
+        size = 1;
+        if (l) size += l->size;
+        if (r) size += r->size;
     }
     void push() {
         //val = val.rot(lazy);
@@ -22,13 +23,14 @@ struct Treap {
         //if (r) r->lazy += lazy;
         //lazy = 0;
     }
-} Treap::mem[], *Treap::pmem = Treap::mem;
+} /*Treap::mem[], *Treap::pmem = Treap::mem*/;
 
-Treap *make(int key) {
-    return new (Treap::pmem++) Treap(key);
-}
+//Treap *make(int key) {
+    //return new (Treap::pmem++) Treap(key);
+//}
 
-Treap *merge(Treap *a, Treap *b) {
+template<class T>
+Treap<T> *merge(Treap<T> *a, Treap<T> *b) {
     if (!a || !b) return a ? a : b;
     if (a->pri > b->pri) {
         a->push();
@@ -43,7 +45,8 @@ Treap *merge(Treap *a, Treap *b) {
     }
 }
 
-void split(Treap *t, int k, Treap *&a, Treap *&b) {
+template<class T>
+void split(Treap<T> *t, T k, Treap<T> *&a, Treap<T> *&b) {
     if (!t) a = b = nullptr;
     else if (t->key <= k) {
         a = t;
@@ -56,4 +59,11 @@ void split(Treap *t, int k, Treap *&a, Treap *&b) {
         split(t->l, k, a, b->l);
         b->pull();
     }
+}
+
+template<class T>
+void insert(Treap<T> *&t, T key) {
+    Treap<T> *a, *b;
+    split(t, key, a, b);
+    t = merge(a, merge(new Treap<T>(key), b));
 }

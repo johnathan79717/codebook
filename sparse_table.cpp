@@ -3,7 +3,7 @@ class SparseTable {
     V(VI) sparse_table;
 public:
     template<typename T>
-    SparseTable(int N, const T &A) : sparse_table(20, VI(N)) {
+    SparseTable(int N, const T &A) : sparse_table(21, VI(N)) {
         REP(i, N) {
             sparse_table[0][i] = A[i];
         }

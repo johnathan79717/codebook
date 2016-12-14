@@ -18,4 +18,4 @@ struct Node {
     Node* getChild(char c) {
         return child[c-'a'] ? child[c-'a'] : (child[c-'a'] = new(ptr++) Node);
     }
-} Node::pool[], *Node::ptr = pool;
+} Node::pool[POOL_SIZE], *Node::ptr = pool;
