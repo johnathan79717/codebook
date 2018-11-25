@@ -2,7 +2,6 @@ class Graph {
   int V;
   struct edge { int to, cap, rev; };
   vector<vector<edge> > G;
-  vector<bool> used;
   VI level, iter;
   void bfs() {
     fill(ALL(level), -1);

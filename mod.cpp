@@ -6,7 +6,7 @@ struct ZZ {
     Short i;
     ZZ():i(0) {}
     ZZ(Short _i): i(_i >= 0 ? _i : _i + MOD) {}
-    ZZ(Long _i): i(_i % MOD) {}
+    ZZ(Long _i): i(_i % MOD >= 0 ? _i % MOD : _i % MOD + MOD) {}
     void operator +=(const ZZ& z) { i += z.i; if(i >= MOD) i -= MOD; }
     void operator -=(const ZZ& z) { i -= z.i; if(i < 0) i += MOD; }
     void operator *=(const ZZ& z) { i = (Long) i * z.i % MOD; }

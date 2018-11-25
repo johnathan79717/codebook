@@ -37,22 +37,6 @@ struct SegmentTree {
     }
   }
 
-  void update(int a, int b, int k, int l, int r, int z) {
-    // we have to make sure dat[k] is the right value after update
-    propagate(k, l, r);
-    if (r <= a || b <= l) return;
-    if (a <= l && r <= b) {
-      double len = sqrt(dat[k].X*dat[k].X+dat[k].Y*dat[k].Y);
-      dat[k].X *= (len+z)/len;
-      dat[k].Y *= (len+z)/len;
-    } else {
-      int m = (l+r)/2;
-      update(a, b, chl(k), l, m, z);
-      update(a, b, chr(k), m, r, z);
-      dat[k] = combine(dat[chl(k)], dat[chr(k)]);
-    }
-  }
-
   void update(int a, int z) {
     update(a, a+1, 0, 0, n, z);
   }
