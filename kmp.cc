@@ -1,46 +1,63 @@
-// Building the partial match table
-// table[0] = -1, table[i+1] is the length of the longest
-// proper suffix of W[0..i] which is a prefix of W
-// time complexity O(|W|)
-void kmp_table(char *W, int *table) {
-  int pos = 2, cnd = 0;
-  table[0] = -1, table[1] = 0;
-  int N = strlen(W);
-  while(pos <= N) {
-    if(W[pos-1] == W[cnd]) {
-      cnd++;
-      table[pos] = cnd;
-      pos++;
-    } else if(cnd > 0) {
-      cnd = table[cnd];
-    } else {
-      table[pos] = 0;
-      pos++;
+#include <cstring>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+void kmp_table(char *W, int *T) {
+    T[0] = -1;
+    int lw = strlen(W);
+    int pos = 1, cnd = 0;
+    while(pos < lw) {
+        if(W[pos] == W[cnd]) {
+            // when we need to backtrack,
+            // the next character must be different from W[pos]
+            // which implies it will not match W[cnd] either
+            // so we can skip cnd and go to T[cnd] directly
+            T[pos] = T[cnd];
+        } else {
+            T[pos] = cnd;
+            do {
+                cnd = T[cnd];
+            } while (cnd >= 0 && W[pos] != W[cnd]);
+        }
+        pos++;
+        cnd++;
     }
-  }
+    T[lw] = cnd;
 }
 
 // search W in S, time complexity O(|S|)
-int kmp_search(char *S, char *W, int *table) {
-  int m = 0, i = 0;
-  int ls = strlen(S), lw = strlen(W);
-  while(m + i < ls) {
-    if(i < lw && W[i] == S[m+i]) {
-      if(i == lw-1) {
-        // W == S[m..m+lw-1]
-        // doesn't have to return can keep going if needed
-        return m;
-      }
-      i++;
-    } else {
-      if(table[i] > -1) {
-        i = table[i];
-        m = m + i - table[i];
-      } else {
-        i = 0;
-        m++;
-      }
+vector<int> kmp_search(char *S, char *W, int *T) {
+    int j = 0, k = 0;
+    int ls = strlen(S), lw = strlen(W);
+    vector<int> P;
+    while(j < ls) {
+        if (W[k] == S[j]) {
+            k++;
+            j++;
+            if(k == lw) {
+                P.push_back(j - lw);
+                k = T[k];
+            }
+        } else {
+            k = T[k];
+            if (k < 0) {
+                j++;
+                k = 0;
+            }
+        }
     }
-  }
-  return ls;
+    return P;
+}
+
+int advance(char *str, int l, int *kmp, char ch, int j) {
+    while (j == l || ch != str[j]) {
+        if (kmp[j] < 0) {
+            return 0;
+        }
+        j = kmp[j];
+    }
+    // j < ls && c[i] == str[j]
+    return j + 1;
 }
