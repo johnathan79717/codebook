@@ -7,6 +7,8 @@ struct ZZ {
     ZZ():i(0) {}
     ZZ(Short _i): i(_i >= 0 ? _i : _i + MOD) {}
     ZZ(Long _i): i(_i % MOD >= 0 ? _i % MOD : _i % MOD + MOD) {}
+    Short val() { return i; }
+    static ZZ raw(Short _i) { return ZZ(_i); }
     void operator +=(const ZZ& z) { i += z.i; if(i >= MOD) i -= MOD; }
     void operator -=(const ZZ& z) { i -= z.i; if(i < 0) i += MOD; }
     void operator *=(const ZZ& z) { i = (Long) i * z.i % MOD; }
@@ -113,4 +115,6 @@ long long pow(long long a, long long b, long long c=Z::MOD){
   }
   return x%c;
 }
+
+void _W(Z x) { printf("%d", x.i);  }
 

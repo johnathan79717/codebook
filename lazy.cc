@@ -53,19 +53,22 @@ struct SegmentTree {
     lazy[k] = Lazy();
   }
 
+  // pre-condition: all ancestor's lazy values have been propagated here
+  // post-condition: dat is correct
   void update(int a, int b, int k, int l, int r, const Lazy &d) {
-    // we have to make sure dat[k] is the right value after update
-    propagate(k, l, r);
-    if (r <= a || b <= l) return;
-    if (a <= l && r <= b) {
-      lazy[k] = d;
-      propagate(k, l, r);
-    } else {
-      int m = (l+r)/2;
-      update(a, b, chl(k), l, m, d);
-      update(a, b, chr(k), m, r, d);
-      dat[k] = combine(dat[chl(k)], dat[chr(k)]);
-    }
+      if (a <= l && r <= b) {
+          lazy[k] += d;
+          propagate(k, l, r);
+      } else {
+          propagate(k, l, r);
+          if (r <= a || b <= l) {
+              return;
+          }
+          int m = (l+r)/2;
+          update(a, b, chl(k), l, m, d);
+          update(a, b, chr(k), m, r, d);
+          dat[k] = combine(dat[chl(k)], dat[chr(k)]);
+      }
   }
 
   Data query(int a, int b) {
