@@ -1,3 +1,5 @@
+#include <vector>
+using namespace std;
 #define PZ(x) PI((x).i);
 
 template<class Short, class Long>
@@ -36,7 +38,7 @@ struct ZZ {
 
     static ZZ fact(int n) {
         while(factorial.size() <= n)
-            factorial.push_back(factorial.back() * SZ(factorial));
+            factorial.push_back(factorial.back() * (int)factorial.size());
         return factorial.at(n);
     }
 
@@ -66,7 +68,7 @@ struct ZZ {
     }
 
     static pair<ZZ,int> factModExp(int n) {
-            if (n == 0) return MP(1, 0);
+            if (n == 0) return {1, 0};
             int e = n / MOD;
             pair<ZZ,int> pr = factModExp(e);
             if (e % 2) {
